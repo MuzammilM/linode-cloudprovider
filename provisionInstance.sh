@@ -15,7 +15,13 @@ fi
 
 function createLinode(){
 grp=$1
-ip=$(linode-cli linodes create --root_pass --region ap-south --image $linImage --group $grp --type $linType --authorized_keys "`cat ~/.ssh/id_rsa.pub`" --label $label --no-header --format 'ipv4' | awk '{print $2}')
+echo "Use Linode StackScripts ?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) read -erp"Enter scriptid " scriptid ; ip=$(linode-cli linodes create --root_pass --region ap-south --image $linImage --group $grp --type $linType --authorized_keys "`cat ~/.ssh/id_rsa.pub`" --label $label --no-header --stackscript_id $scriptid --format 'ipv4' | awk '{print $2}'); break;;
+        No ) ip=$(linode-cli linodes create --root_pass --region ap-south --image $linImage --group $grp --type $linType --authorized_keys "`cat ~/.ssh/id_rsa.pub`" --label $label --no-header --format 'ipv4' | awk '{print $2}'); break;;
+    esac
+done
 ip2=`echo $ip | sed -e 's/ //g'`
 sudo sed  -i '/\['"$grp"'\]/a '"$label"' ansible_ssh_host='"$ip2"'' /etc/ansible/hosts
 echo "New machine ip :"$ip2
