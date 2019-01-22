@@ -18,6 +18,7 @@ grp=$1
 ip=$(linode-cli linodes create --root_pass --region ap-south --image $linImage --group $grp --type $linType --authorized_keys "`cat ~/.ssh/id_rsa.pub`" --label $label --no-header --format 'ipv4' | awk '{print $2}')
 ip2=`echo $ip | sed -e 's/ //g'`
 sudo sed  -i '/\['"$grp"'\]/a '"$label"' ansible_ssh_host='"$ip2"'' /etc/ansible/hosts
+echo "New machine ip :"$ip2
 }
 read -erp"Enter ansible/linode group name(Eg: Spark) " gname
 read -erp"Enter label to assign to the server(Eg: Zeus) " label
