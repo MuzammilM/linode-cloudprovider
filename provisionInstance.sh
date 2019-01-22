@@ -25,10 +25,9 @@ linode-cli images list
 read -erp"Enter image to be used " linImage
 linode-cli linodes types
 read -erp"Enter instance type " linType
-if grep -q "\['$gname\]'" /etc/ansible/hosts;
+if grep -q "\[$gname\]" /etc/ansible/hosts;
 then
 createLinode $gname
-sudo sed  -i '/\['"$gname"'\]/a '"$label"' ansible_ssh_host='"$ip2"'' /etc/ansible/hosts
 else
 echo "Group not available ; create a new group called "$gname" ?"
 select yn in "Yes" "No"; do
