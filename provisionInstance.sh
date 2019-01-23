@@ -12,6 +12,14 @@ pip install linode-cli --upgrade
 echo "${ERROR}Please configure the cli first ${reset}"
 exit
 fi
+
+if ! [ -x "$(command -v jq)" ];
+then
+sudo apt-get install -y jq
+echo "${WARN}Installing jq ${reset}"
+exit
+fi
+
 function listStackScripts(){
 token=$1
 user=$2
